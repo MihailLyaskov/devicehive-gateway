@@ -1,0 +1,10 @@
+{
+	"connectors": [
+		{
+			"type":"client",
+			"apiurl":"http://playground.devicehive.com/api/rest",
+			"accessKey":"FsJCDRAbjTO+5GA8b0nydWJvtHl4Nwc4wZqHnqM/+Gk="
+		}
+	]
+	
+}
