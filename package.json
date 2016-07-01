@@ -1,0 +1,28 @@
+{
+  "name": "dh-gateway",
+  "version": "1.0.0",
+  "description": "Gateway to DeviceHive containing device and client",
+  "main": "gateway.js",
+  "scripts": {
+    "test": "node gateway.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MihailLyaskov/devicehive-gateway.git"
+  },
+  "keywords": [
+    "DeviceHive",
+    "Gateway"
+  ],
+  "author": "Mihail Lyaskov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MihailLyaskov/devicehive-gateway/issues"
+  },
+  "homepage": "https://github.com/MihailLyaskov/devicehive-gateway#readme",
+  "dependencies": {
+    "config": "^1.21.0",
+    "ws": "^1.1.1",
+    "xhr2": "^0.1.3"
+  }
+}
