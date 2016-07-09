@@ -1,13 +1,13 @@
 global.XMLHttpRequest = require('xhr2');
 global.WebSocket = require('ws');
 var DeviceHive = require('./devicehive.client');
-var Commands = require('./commands');
+var Messages = require('./messages');
 
 var Client = function (options){
 	var DH = new DeviceHive(options.apiurl , options.accessKey);
-	var commands = new Commands(DH);
+	var messages = new Messages(DH);
 	
-	this.commands=commands;
+	this.messages=messages;
 	this.DH = DH;
 
 };
@@ -15,7 +15,9 @@ var Client = function (options){
 Client.prototype.start = function (cb,handler){
 	var self = this;
 	var data = {
-		device : "esp-device",
+		messageType : "getNotifications",
+		filter : null ,
+		deviceID : "esp-device",
 		command : "gpio/write" ,
 		parameters : { "5":1 } 
 	}
@@ -26,9 +28,9 @@ Client.prototype.start = function (cb,handler){
 	            if (err) {
 	                console.log(err);
 	            }
-	            console.log("trying to send command!");
-				self.commands.SendCommand(data);
-
+	            console.log("trying to send message!");
+				self.messages.SendMessage(data);
+				
 
 
 				/*self.DH.sendCommand('esp-device',self.command, self.parameters1 ,function(err, res) {
