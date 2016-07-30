@@ -13,18 +13,18 @@ var Messages = function(dh){
 
 Messages.prototype.SendMessage = function(messageData){
 	if(messageData.messageType == 'sendCommand'){
-			this.dh.sendCommand(messageData.deviceID,messageData.command, messageData.parameters ,function(err, res) {
+			return this.dh.sendCommand(messageData.deviceID,messageData.command, messageData.parameters ,function(err, res) {
 				if(err){
 					console.log(err);
 					return err;
 				}
 				console.log( messageData.command + " send to " + messageData.deviceID + "with parameters" + messageData.parameters );
-				console.log(res);
+				//console.log(res);
 				return res;
 			});
 	}
 	else if(messageData.messageType == 'getNetworks'){
-		this.dh.getNetworks(messageData.filter,function(err,res){
+		return this.dh.getNetworks(messageData.filter,function(err,res){
 				if(err){
 					console.log(err);
 					return err;
@@ -36,7 +36,7 @@ Messages.prototype.SendMessage = function(messageData){
 		});
 	}
 	else if(messageData.messageType == 'getDevices'){
-		this.dh.getDevices(null,function(err,res){
+		return this.dh.getDevices(null,function(err,res){
 				if(err){
 					console.log(err);
 					return err;
@@ -49,7 +49,7 @@ Messages.prototype.SendMessage = function(messageData){
 
 	}
 	else if(messageData.messageType == 'getEquipmentState'){
-		this.dh.getEquipmentState(messageData.deviceID,function(err,res){
+		return this.dh.getEquipmentState(messageData.deviceID,function(err,res){
 				if(err){
 					console.log(err);
 					return err;
@@ -62,7 +62,7 @@ Messages.prototype.SendMessage = function(messageData){
 
 	}
 	else if(messageData.messageType == 'getNotifications'){
-		this.dh.getNotifications(messageData.deviceID,messageData.filter,function(err,res){
+		return this.dh.getNotifications(messageData.deviceID,messageData.filter,function(err,res){
 				if(err){
 					console.log(err);
 					return err;
