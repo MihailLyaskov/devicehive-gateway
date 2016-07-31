@@ -37,9 +37,9 @@ Client.prototype.start = function (cb,handler){
   					console.log('received message %s %s', topic, message.toString());
   					switch (topic) {
     				case 'client/SendMessage':
-      					res = self.messages.SendMessage(JSON.parse(message));
-      					//console.log(res);
-      					client.publish('client/response' , JSON.stringify(res));
+      					res = self.messages.SendMessage(JSON.parse(message),client);
+      					
+      					//client.publish('client/response' , JSON.stringify(res));
       					break;
     				default:
     					console.log("No topic");
