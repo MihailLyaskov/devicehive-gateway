@@ -97,7 +97,7 @@ Messages.prototype.SendMessage = function(messageData,mqtt){
 		},messageData.subscribtion);
 		subscribtion.message(function(deviceIds,arguments){
 			console.log(JSON.stringify(arguments));
-			mqtt.publish('client/subscribe/esp-device',JSON.stringify(arguments.parameters));
+			mqtt.publish(messageData.subPath+'/'+messageData.subscription.deviceIds,JSON.stringify(arguments.parameters));
 		});
 	}
 

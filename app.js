@@ -17,7 +17,7 @@ var message2 = {
 	};
 var SubMessage = {
 		messageType : "Subscribe",
-		subPath : "client/subscribe/esp-device",
+		subPath : "client/subscribe",
 		subscription : {
 			deviceIds : "esp-device",
 			names : "uart/int",
@@ -36,7 +36,7 @@ var message3 = {
 client.on('connect', function(){
   client.subscribe('client/status');
   client.subscribe('client/response');
-  client.subscribe('client/subscribe/esp-device');
+  
 });
 
 client.on('message', function(topic, message){
@@ -45,7 +45,7 @@ client.on('message', function(topic, message){
       return handleClientStatus(message);
     case 'client/response':
       return handleClientResponse(message);
-    case 'client/subscribe/esp-device':
+    case SubMessage.subPath+'/'+SubMessage.subscription.deviceIds:
       return handleSubscribtion(message);
   }
   console.log('No handler for topic %s', topic);
@@ -88,6 +88,7 @@ setTimeout(function(err){
   }
   console.log('subscribtion');
   client.publish('client/SendMessage', JSON.stringify(SubMessage));
+  client.subscribe(SubMessage.subPath+'/'+SubMessage.subscription.deviceIds);
 }, 15000);
 
 setTimeout(function(err){
