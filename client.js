@@ -34,7 +34,7 @@ Client.prototype.start = function (cb,handler){
 
 				client.on('message', function(topic, message){
 					var res;
-  					console.log('received message %s %s', topic, message.toString());
+  					//console.log('received message %s %s', topic, message.toString());
   					switch (topic) {
     				case 'client/SendMessage':
       					res = self.messages.SendMessage(JSON.parse(message),client);

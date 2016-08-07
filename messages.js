@@ -8,7 +8,8 @@
 
 var Messages = function(dh){
 	this.dh = dh;
-	
+	this.sub = [];
+
 };
 
 Messages.prototype.SendMessage = function(messageData,mqtt){
@@ -85,22 +86,40 @@ Messages.prototype.SendMessage = function(messageData,mqtt){
 
 	}
 	else if(messageData.messageType == 'Subscribe'){
-		var subscribtion = this.dh.subscribe(function (err,res){
+		var subscribtion = this.dh.subscribe( function (err,res ){
 			if(err){
 				console.log(err);
 				mqtt.publish(messageData.subPath,JSON.stringify(err));
-				return err
+				//return err
 			}
-			console.log(res);
-			mqtt.publish(messageData.subPath,JSON.stringify(res));
-			return res;
+			//console.log('SUBSCRIBE RESULLT '+ JSON.stringify(res && res.subscribtionId));
+			//mqtt.publish(messageData.subPath+'/'+messageData.subscription.deviceIds,'SUBSCRIBTION ID '+ JSON.stringify(res.subscriptionId));
+			//return res;
 		},messageData.subscribtion);
+		this.sub.push(subscribtion);
+		var number = this.sub.length-1;
+		mqtt.publish(messageData.subPath,number.toString());
 		subscribtion.message(function(deviceIds,arguments){
-			console.log(JSON.stringify(arguments));
-			mqtt.publish(messageData.subPath+'/'+messageData.subscription.deviceIds,JSON.stringify(arguments.parameters));
+			console.log(JSON.stringify(arguments.parameters));
+			var data = arguments.parameters;
+			var buf = new Buffer(data.data, 'base64');
+			mqtt.publish(messageData.subPath+'/'+messageData.subscription.deviceIds,buf.toString('utf8'));
 		});
 	}
-
+	else if(messageData.messageType == 'Unsubscribe'){
+		var subscribtion = this.dh.unsubscribe(this.sub[messageData.subscription],function (err,res){
+			if(err){
+				console.log(err);
+				mqtt.publish(messageData.subPath,JSON.stringify(err));
+			}
+			//console.log(res);
+			mqtt.publish(messageData.subPath,JSON.stringify(res));
+			
+			//return res;
+		});
+		this.sub.splice(messageData.subscription,1);
+		mqtt.publish(messageData.subPath,'unsubscribed for ');
+	}
 	else{
 			console.log('Unknown message!');
 	}

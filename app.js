@@ -1,5 +1,6 @@
 var mqtt = require('mqtt');
 var client = mqtt.connect('mqtt://localhost');
+var subscribtionID;
 var message1 = {
 		messageType : "sendCommand",
 		filter : null ,
@@ -25,6 +26,13 @@ var SubMessage = {
 		}
 };
 
+var UnSubMessage = {
+	messageType : "Unsubscribe",
+		subPath : "client/subscribe",
+		subscription : null ,
+		deviceIds : "esp-device"		
+};
+
 var message3 = {
 		messageType : "sendCommand",
 		filter : null ,
@@ -36,7 +44,7 @@ var message3 = {
 client.on('connect', function(){
   client.subscribe('client/status');
   client.subscribe('client/response');
-  
+  client.subscribe('client/subscribe');
 });
 
 client.on('message', function(topic, message){
@@ -46,13 +54,21 @@ client.on('message', function(topic, message){
     case 'client/response':
       return handleClientResponse(message);
     case SubMessage.subPath+'/'+SubMessage.subscription.deviceIds:
+      return handleSubscribtionData(message);
+    case 'client/subscribe':
       return handleSubscribtion(message);
+ 
   }
   console.log('No handler for topic %s', topic);
 })
 
+function handleSubscribtionData(message){
+	console.log('subscription data' + message)
+};
+
 function handleSubscribtion(message){
-	console.log('subscription %s', message);
+	console.log('subscription ' + message.toString('utf8'));
+	subscribtionID = message.toString('utf8');
 };
 
 function handleClientStatus (message) {
@@ -86,10 +102,20 @@ setTimeout(function(err){
   if(err){
   	console.log(err);
   }
-  console.log('subscribtion');
+  console.log('subscribtion ' + JSON.stringify(SubMessage));
   client.publish('client/SendMessage', JSON.stringify(SubMessage));
   client.subscribe(SubMessage.subPath+'/'+SubMessage.subscription.deviceIds);
-}, 15000);
+}, 10000);
+
+setTimeout(function(err){
+  if(err){
+  	console.log(err);
+  }
+  var string = JSON.stringify(UnSubMessage);
+  console.log('unsubscribe ' + string.replace('null',subscribtionID));
+  client.publish('client/SendMessage', string.replace('null',subscribtionID));
+  //client.unsubscribe(UnSubMessage.subPath+'/'+UnSubMessage.deviceIds);
+}, 115000);
 
 setTimeout(function(err){
   if(err){
