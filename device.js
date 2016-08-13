@@ -44,9 +44,16 @@ Device.prototype.start = function (cb,handler){
 	            }
 				var mqtt = require('mqtt');
 	 			var device = mqtt.connect('mqtt://localhost');
+	 			
+	 			device.on('connect', function(){
+  					device.publish(self.equipment.MQTT_pub_sub, '{ "gateway":"device","status": "online" }');
+  					console.log('MQTT Device online!');
+				});
+	 			
 	 			var SubCommands = {
 	 				names: self.equipment.commands
 	 			};
+	 			
 	 			var CmdSub = self.dh.subscribe(function(err,res){
 	 				if(err){
 	 					console.log(err);
@@ -54,8 +61,23 @@ Device.prototype.start = function (cb,handler){
 	 				console.log('DEVICE SUBSCRIBES TO MASAGES '+JSON.stringify(res));
 	 			},SubCommands);
 
+	 			
+
 	 			CmdSub.message(function(cmd){
 	 				console.log(JSON.stringify(cmd));
+	 				device.subscribe(self.equipment.MQTT_pub_sub + '/response');
+	 				device.on('message', function(topic, message){
+						if( topic == self.equipment.MQTT_pub_sub + '/response'){
+      						cmd.update(JSON.parse(message),function(err,res){
+      							if(err)
+      								console.log(err);
+      							console.log('Command updated!');
+      						});
+  						}
+  						else device.publish(self.equipment.MQTT_pub_sub,'Incorect Topic!');
+  						device.unsubscribe(self.equipment.MQTT_pub_sub + '/response');
+					});
+					device.publish(self.equipment.MQTT_pub_sub,JSON.stringify(cmd));
 	 			});
 
 	            return cb();
@@ -65,49 +87,6 @@ Device.prototype.start = function (cb,handler){
 
 };
 
-
-
-
-
-
-	
-	
-/*
-	console.log("trying to open chanell!");
-	self.DH.openChannel(function (err, res) {
-	            if (err) {
-	                console.log(err);
-	            }
-	            var mqtt = require('mqtt');
-	 			var client = mqtt.connect('mqtt://localhost');
-	            console.log("trying to send message!");
-				//self.messages.SendMessage(data);
-				client.on('connect', function(){
-  					client.subscribe('client/SendMessage');
-  					// Inform that client gateway is online
-  					client.publish('client/status', '{ "status": "online" }');
-  					console.log('MQTT Client online!');
-				})
-
-				client.on('message', function(topic, message){
-					var res;
-  					//console.log('received message %s %s', topic, message.toString());
-  					switch (topic) {
-    				case 'client/SendMessage':
-      					res = self.messages.SendMessage(JSON.parse(message),client);
-      					
-      					//client.publish('client/response' , JSON.stringify(res));
-      					break;
-    				default:
-    					console.log("No topic");
-    					break;
-  					}
-				});
-
-	        }, 
-	        "websocket"
-	);
-};*/
 
 
 module.exports = Device;

@@ -27,7 +27,7 @@ Client.prototype.start = function (cb,handler){
 				client.on('connect', function(){
   					client.subscribe('client/SendMessage');
   					// Inform that client gateway is online
-  					client.publish('client/status', '{ "status": "online" }');
+  					client.publish('client/status', '{ "gateway":"client","status": "online" }');
   					console.log('MQTT Client online!');
 				})
 
