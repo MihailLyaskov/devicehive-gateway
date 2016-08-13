@@ -4,6 +4,31 @@
 			"type":"client",
 			"apiurl":"http://playground.devicehive.com/api/rest",
 			"accessKey":"FsJCDRAbjTO+5GA8b0nydWJvtHl4Nwc4wZqHnqM/+Gk="
+		},
+		{
+			"type": "device",
+			"deviceId": "database",
+    		"deviceKey": "devicekey",
+			"deviceName": "database",
+			"deviceClass": {
+				"name": "Services",
+				"version": "0.0.1"
+			},
+			"apiurl": "http://playground.devicehive.com/api/rest",
+			"accessKey": "FsJCDRAbjTO+5GA8b0nydWJvtHl4Nwc4wZqHnqM/+Gk=",
+			"equipment": 
+				{
+					"name": "Database",
+					"code": "Database",
+					"type": "server",
+					"MQTT_pub_sub": "device/database",
+					"commands": [
+						 "database/davicelog/start",
+						 "database/devicelog/stop",
+						 "database/query"
+					]
+				}
+			
 		}
 	]
 	

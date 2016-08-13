@@ -1,5 +1,4 @@
-global.XMLHttpRequest = require('xhr2');
-global.WebSocket = require('ws');
+
 var DeviceHive = require('./devicehive.client');
 var Messages = require('./messages');
 
