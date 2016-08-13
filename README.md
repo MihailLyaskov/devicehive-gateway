@@ -89,6 +89,7 @@ After the subscribtion is done a number is returned. This number of the subscrib
 parameters:
 subPath is the MQTT path to which the subscribe command in being sent and sub number is being recieved.
 names is the name of the notification.
+Notifications for the subscribed device are returned in client/subscribe/<deviceID> MQTT Topic.
 ```json
 {
 		"messageType" : "Subscribe",
