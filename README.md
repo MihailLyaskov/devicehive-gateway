@@ -150,7 +150,7 @@ Returns array of json objects giving describtion for the devices.
 
 The Device Gateway registers a device in the network using information from the configuration file config/default.json.
 After that it subscribes for the commands listed again in config/default.json - equipment.commands.
-The MQTT Topic used for sending commands to the applications is device/command and the topic for responses in device/command/response
+The MQTT Topic used for sending commands to the applications is device/database and the topic for responses in device/database/response
 
 ## Running the gateway and test apps
 After seting up the configuration file ,gateway can be started with 
